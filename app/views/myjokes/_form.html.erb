@@ -1,0 +1,37 @@
+<%= form_for(@myjoke) do |f| %>
+  <% if @myjoke.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@myjoke.errors.count, "error") %> prohibited this myjoke from being saved:</h2>
+
+      <ul>
+      <% @myjoke.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :picture_url %><br />
+    <%= f.text_field :picture_url %>
+  </div>
+  <div class="field">
+    <%= f.label :audio_url %><br />
+    <%= f.text_field :audio_url %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br />
+    <%= f.number_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :approved %><br />
+    <%= f.number_field :approved %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

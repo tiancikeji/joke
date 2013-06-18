@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @myjoke.name %>
+</p>
+
+<p>
+  <b>Picture url:</b>
+  <%= @myjoke.picture_url %>
+</p>
+
+<p>
+  <b>Audio url:</b>
+  <%= @myjoke.audio_url %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @myjoke.user_id %>
+</p>
+
+<p>
+  <b>Approved:</b>
+  <%= @myjoke.approved %>
+</p>
+
+
+<%= link_to 'Edit', edit_myjoke_path(@myjoke) %> |
+<%= link_to 'Back', myjokes_path %>

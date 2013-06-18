@@ -2,6 +2,8 @@
 
 <table class="table">
   <tr>
+    <th>ID</th>
+    <th>CreateAt Time</th>
     <th>Name</th>
     <th>Picture</th>
     <th>Audio</th>
@@ -15,6 +17,8 @@
 
 <% @myjokes.each do |myjoke| %>
   <tr>
+    <td><%= myjoke.id %></td>
+    <td><%= myjoke.created_at %></td>
     <td><%= myjoke.name %></td>
     <td><img src="<%= myjoke.picture_url %>" alt="" /></td>
     <td><a href="<%= myjoke.audio_url %>" target="blank">click to play</a></td>

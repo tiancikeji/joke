@@ -5,7 +5,7 @@ class CreateMyjokes < ActiveRecord::Migration
       t.string :picture_url
       t.string :audio_url
       t.integer :user_id
-      t.integer :approved
+      t.integer :approved, :default => 0
 
       t.timestamps
     end

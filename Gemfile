@@ -21,4 +21,4 @@ gem "rolify", ">= 3.2.0"
 gem "thin"
 gem 'quiet_assets', :group => [:development]
 gem "therubyracer", ">= 0.10.2", :group => :assets, :platform => :ruby
-
+gem "carrierwave"

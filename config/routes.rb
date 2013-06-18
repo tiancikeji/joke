@@ -1,9 +1,11 @@
 Joke::Application.routes.draw do
   resources :likes
-
-
   resources :myjokes
 
+  namespace :api do 
+    resources :likes
+    resources :myjokes
+  end
 
   authenticated :user do
     root :to => 'home#index'

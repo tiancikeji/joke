@@ -1,11 +1,12 @@
 <h1>Listing myjokes</h1>
 
-<table class="tables">
+<table class="table">
   <tr>
     <th>Name</th>
-    <th>Picture url</th>
-    <th>Audio url</th>
+    <th>Picture</th>
+    <th>Audio</th>
     <th>User</th>
+    <th>Like</th>
     <th>Approved</th>
     <th></th>
     <th></th>
@@ -15,9 +16,10 @@
 <% @myjokes.each do |myjoke| %>
   <tr>
     <td><%= myjoke.name %></td>
-    <td><%= myjoke.picture_url %></td>
-    <td><%= myjoke.audio_url %></td>
+    <td><img src="<%= myjoke.picture_url %>" alt="" /></td>
+    <td><a href="<%= myjoke.audio_url %>" target="blank">click to play</a></td>
     <td><%= myjoke.user_id %></td>
+    <td><%= myjoke.likes.count %></td>
     <td><%= myjoke.approved %></td>
     <td><%= link_to 'Show', myjoke %></td>
     <td><%= link_to 'Edit', edit_myjoke_path(myjoke) %></td>

@@ -33,10 +33,13 @@ curl -XGET -d'[user_id]=1' http://localhost:3000/api/likes
 
 {"likes":[{"approved":1,"audio_url":{"url":"/public/audios/1/zhiqingchun.mp3"},"created_at":"2013-06-18T16:19:38Z","id":1,"name":"11","picture_url":{"url":"/public/pictures/1/logo.png"},"updated_at":"2013-06-18T16:32:38Z","user_id":1}]}
 </code>
+If the user has already liked this joke, returns an error.
 
 <h4>unlike </h4>
 <code>
-curl -XDELETE -d'[user_id]=1' http://localhost:3000/api/likes/1
+curl -XDELETE -d'[user_id]=6' http://localhost:3000/api/likes/1
+
+likes/:id, where :id = like id
 
 {"success":true}
 </code>

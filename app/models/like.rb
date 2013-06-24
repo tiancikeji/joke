@@ -1,5 +1,10 @@
 class Like < ActiveRecord::Base
-  attr_accessible :myjoke_id, :user_id
+  attr_accessible :myjoke_id, :uid
   belongs_to :myjoke
-  belongs_to :user
+
+  validates :uid, :presence => true
+
+  def num_likes
+    Like.where(:myjoke_id => :myjoke_id).count
+  end
 end

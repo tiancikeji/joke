@@ -1,8 +1,9 @@
+#encoding: utf-8
 class Api::LikesController < ApplicationController
   # GET /likes
   # GET /likes.json
   def index
-    @likes = Like.where("user_id = ?",params[:user_id])
+    @likes = Like.where("uid = ?",params[:uid])
     myjoke_ids = []
     @likes.each do |like|
       myjoke_ids << like.myjoke_id
@@ -21,56 +22,25 @@ class Api::LikesController < ApplicationController
     end
   end
 
-  # GET /likes/new
-  # GET /likes/new.json
-  def new
-    @like = Like.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @like }
-    end
-  end
-
-  # GET /likes/1/edit
-  def edit
-    @like = Like.find(params[:id])
-  end
-
   # POST /likes
   # POST /likes.json
   def create
-    @like = Like.new(params[:like])
-    if @like.save
-      render json: { like: @like}
+    @like = Like.new(:uid => params[:uid], :myjoke_id => params[:myjoke_id])
+    #check to make sure this user hasn't liked it before
+    likes = Like.where(:uid => @like.uid, :myjoke_id => @like.myjoke_id)
+    if likes.size > 0
+      if "0" == params[:isLike]
+        likes.destroy_all
+        render json: { success: true }
+      else
+        render json: { success: false, reason: "用户已经喜欢" }
+      end
+    elsif "0" == params[:isLike]
+        render json: { success: false, reason: "" }
+    elsif @like.save
+      render json: { myjoke_id: @like.myjoke_id, num_likes: @like.num_likes}
     else
       render json: @like.errors, status: :unprocessable_entity
     end
-  end
-
-  # PUT /likes/1
-  # PUT /likes/1.json
-  def update
-    @like = Like.find(params[:id])
-
-    respond_to do |format|
-      if @like.update_attributes(params[:like])
-        format.html { redirect_to @like, notice: 'Like was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @like.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /likes/1
-  # DELETE /likes/1.json
-  def destroy
-    @likes = Like.where("user_id = ?",params[:user_id])
-    @likes.each do |like|
-      like.destroy
-    end
-    render :json => {:success => true}
   end
 end

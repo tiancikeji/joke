@@ -11,23 +11,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130618055745) do
+ActiveRecord::Schema.define(:version => 20130621024619) do
 
   create_table "likes", :force => true do |t|
-    t.integer  "user_id"
     t.integer  "myjoke_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "uid"
   end
 
   create_table "myjokes", :force => true do |t|
     t.string   "name"
     t.string   "picture_url"
     t.string   "audio_url"
-    t.integer  "user_id"
-    t.integer  "approved"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "approved",    :default => 0
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+    t.string   "uid"
   end
 
   create_table "roles", :force => true do |t|

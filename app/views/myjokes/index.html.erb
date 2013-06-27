@@ -8,6 +8,7 @@
     <th>Picture</th>
     <th>Audio</th>
     <th>User</th>
+    <th>Length</th>
     <th>Like</th>
     <th>Approved</th>
     <th></th>
@@ -22,7 +23,8 @@
     <td><%= myjoke.name %></td>
     <td><img src="<%= myjoke.picture_url %>" alt="" /></td>
     <td><a href="<%= myjoke.audio_url %>" target="blank">click to play</a></td>
-    <td><%= myjoke.user_id %></td>
+    <td><%= myjoke.uid %></td>
+    <td><%= myjoke.length %></td>
     <td><%= myjoke.likes.count %></td>
     <td><%= myjoke.approved %></td>
     <td><%= link_to 'Show', myjoke %></td>

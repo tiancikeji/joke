@@ -11,8 +11,14 @@ class Api::MyjokesController < ApplicationController
       offset = page.to_i * PER_PAGE
     end
     uid = params[:uid]
-    @myjokes = Myjoke.order("created_at DESC").limit(PER_PAGE).offset(offset)
-    #TODO add islike
+    if params[:date] 
+      date = DateTime.parse(params[:date])
+      @myjokes.Myjoke.where("created_at > '#{today.yesterday}' AND created_at < '{#today.tomorrow}'")
+        .limit(PER_PAGE).offset(offset)
+
+    else
+      @myjokes = Myjoke.order("created_at DESC").limit(PER_PAGE).offset(offset)
+    end
     render json: { :myjokes => @myjokes }
   end
 
@@ -49,7 +55,14 @@ class Api::MyjokesController < ApplicationController
     if params[:myjoke]
       params[:myjoke][:approved] = 1
     end
+    uid = params[:myjoke][:uid]
+    
     @myjoke = Myjoke.new(params[:myjoke])
+    if params[:imageFileData]
+      @myjoke.picture_url = File.open(createPhoto(params[:imageFileData], uid))
+    end
+    @myjoke.audio_url = File.open(createAudioFile(params[:audioFileData], uid))
+
     if @myjoke.save
       render :json => { :success => true, :id => @myjoke.id}
     else
@@ -85,30 +98,28 @@ class Api::MyjokesController < ApplicationController
     end
   end
 
-  # POST /myjokes/audio
-  def audio
-    #@user = User.where #TODO authentication
-    uid = params[:uid]
-    filedata = params[:Filedata]
-    tmp_file = "#{Rails.root}/tmp/uploaded-#{uid}-#{Time.now.to_i}.jpg"
-    File.open(tmp_file, 'wb') do |f|
-      f.write filedata.read
-    end
-    render :json => { :success => true, :url => "http://www.magnac.com/sounds/edensmall.mp3"}
+  def createPhoto(file, uid)
+    filename = "/pictures/image-#{uid}-#{Time.now.to_i}.jpg"
+    writeFile(file, filename)
+    #filename
+    #URI.join(root_url, filename).to_s
   end
 
-  # POST /myjokes/photo
-  def photo
-    uid = params[:uid]
-    filedata = params.first.first #params[:Filedata]
-    tmp_file = "#{Rails.root}/tmp/uploaded-#{uid}-#{Time.now.to_i}.jpg"
-    File.open(tmp_file, 'wb') do |f|
-      filedata.bytes.each do |b|
-        f.write b
-      end
-    end
-    logger.debug tmp_file
-    render :json => { :success => true, :url => "http://railscasts.com/static/episodes/stills/134-paperclip.png"}
+  def createAudioFile(file, uid)
+    filename = "/audios/audio-#{uid}-#{Time.now.to_i}.mp3"
+    writeFile(file, filename)
+    #filename
+    #URI.join(root_url, filename).to_s
   end
+
+  def writeFile(file, filename)
+    filename = "#{Rails.root}/public#{filename}"
+    File.open(filename, 'wb') do |f|
+      f.write file
+    end
+    filename
+    #logger.debug filename
+  end
+
 
 end

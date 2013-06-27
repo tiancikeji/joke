@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130621024619) do
+ActiveRecord::Schema.define(:version => 20130626173946) do
 
   create_table "likes", :force => true do |t|
     t.integer  "myjoke_id"
@@ -28,6 +28,9 @@ ActiveRecord::Schema.define(:version => 20130621024619) do
     t.datetime "created_at",                 :null => false
     t.datetime "updated_at",                 :null => false
     t.string   "uid"
+    t.string   "description"
+    t.integer  "num_likes",   :default => 0
+    t.integer  "length",      :default => 0
   end
 
   create_table "roles", :force => true do |t|

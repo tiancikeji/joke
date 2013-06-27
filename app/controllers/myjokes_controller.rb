@@ -40,6 +40,7 @@ class MyjokesController < ApplicationController
   # POST /myjokes
   # POST /myjokes.json
   def create
+    
     @myjoke = Myjoke.new(params[:myjoke])
 
     respond_to do |format|

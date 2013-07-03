@@ -5,21 +5,22 @@ class Api::MyjokesController < ApplicationController
   # GET /myjokes
   # GET /myjokes.json
   def index
-    page = params[:page]
-    offset = 0
-    if not page.nil? or page > 1
-      offset = page.to_i * PER_PAGE
-    end
-    uid = params[:uid]
-    if params[:date] 
-      date = DateTime.parse(params[:date])
-      @myjokes.Myjoke.where("created_at > '#{today.yesterday}' AND created_at < '{#today.tomorrow}'")
-        .limit(PER_PAGE).offset(offset)
-
-    else
-      @myjokes = Myjoke.order("created_at DESC").limit(PER_PAGE).offset(offset)
-    end
-    render json: { :myjokes => @myjokes }
+   #page = params[:page]
+   #offset  = 0
+   #if page.nil?
+   #  offset = 0
+   #elsif page.to_i > 1
+   #  offset = (page.to_i - 1) * PER_PAGE
+   #end
+   #uid = params[:uid]
+   #if params[:date] 
+   #  date_limit = DateTime.parse(params[:date])
+   #  @myjokes = Myjoke.where("created_at > '#{date_limit.yesterday}' AND created_at < '#{date_limit.tomorrow}'")
+   #    .limit(PER_PAGE).offset(offset)
+   #else
+   #  @myjokes = Myjoke.order("created_at DESC").limit(PER_PAGE).offset(offset)
+   #end
+    render json: { :myjokes => Myjoke.getJokes(params[:uid], params[:page], params[:date]) }
   end
 
   # GET /myjokes/1
@@ -52,9 +53,6 @@ class Api::MyjokesController < ApplicationController
   # POST /myjokes
   # POST /myjokes.json
   def create
-    if params[:myjoke]
-      params[:myjoke][:approved] = 1
-    end
     uid = params[:myjoke][:uid]
     
     @myjoke = Myjoke.new(params[:myjoke])
@@ -67,6 +65,21 @@ class Api::MyjokesController < ApplicationController
       render :json => { :success => true, :id => @myjoke.id}
     else
       render :json => { :success => false }
+    end
+  end
+
+  # POST /myjokes/1.json
+  def play
+    if params[:uid].nil?
+      render :json => { :success => false }
+      return
+    end
+    @myjoke = Myjoke.find(params[:id])
+    @myjoke.update_attribute(:num_plays, (@myjoke.num_plays + 1))
+    if @myjoke.save
+      render :json => { :success => true, :id => @myjoke.id, :num_plays => @myjoke.num_plays}
+    else 
+      render :json => { :success => false, :errors => @myjoke.errors }
     end
   end
 
@@ -96,6 +109,11 @@ class Api::MyjokesController < ApplicationController
       format.html { redirect_to myjokes_url }
       format.json { head :no_content }
     end
+  end
+
+  # POST /feedback
+  def feedback
+    @myjoke.audio_url = File.open(createAudioFile(params[:audioFileData], uid))
   end
 
   def createPhoto(file, uid)

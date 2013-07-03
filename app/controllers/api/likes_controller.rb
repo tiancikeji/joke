@@ -38,7 +38,7 @@ class Api::LikesController < ApplicationController
     elsif "0" == params[:isLike]
         render json: { success: false, reason: "" }
     elsif @like.save
-      render json: { myjoke_id: @like.myjoke_id, num_likes: @like.num_likes}
+      render json: { success: true, myjoke_id: @like.myjoke_id, num_likes: @like.num_likes}
     else
       render json: @like.errors, status: :unprocessable_entity
     end

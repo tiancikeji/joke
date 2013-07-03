@@ -1,12 +1,13 @@
 Joke::Application.routes.draw do
   resources :likes
   resources :myjokes
+  resources :feedbacks
 
   namespace :api do 
     resources :likes
     resources :myjokes
-    match '/myjokes/photo' => "myjokes#photo", :via => :post
-    match '/myjokes/audio' => "myjokes#audio", :via => :post
+    resources :feedbacks
+    match '/myjokes/play' => "myjokes#play", :via => :post
   end
 
   authenticated :user do

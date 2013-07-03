@@ -57,6 +57,7 @@ class Api::MyjokesController < ApplicationController
     
     @myjoke = Myjoke.new(params[:myjoke])
     if params[:imageFileData]
+      #@file.original_filename = 'photo.jpg'
       @myjoke.picture_url = File.open(createPhoto(params[:imageFileData], uid))
     end
     @myjoke.audio_url = File.open(createAudioFile(params[:audioFileData], uid))

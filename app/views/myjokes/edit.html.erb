@@ -1,6 +1,45 @@
 <h1>Editing myjoke</h1>
 
-<%= render 'form' %>
+<%= form_for(@myjoke) do |f| %>
+  <% if @myjoke.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@myjoke.errors.count, "error") %> prohibited this myjoke from being saved:</h2>
+
+      <ul>
+      <% @myjoke.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :uid %><br />
+    <%= f.text_field :uid %>
+  </div>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_field :description %>
+  </div>
+  <div class="field">
+    <%= f.label :length %><br />
+    <%= f.number_field :length %>
+  </div>
+  <div class="field">
+    <%= f.radio_button :approved, '1' %> accept
+
+    <%= f.radio_button :approved, '0' %> reject
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
 
 <%= link_to 'Show', @myjoke %> |
 <%= link_to 'Back', myjokes_path %>

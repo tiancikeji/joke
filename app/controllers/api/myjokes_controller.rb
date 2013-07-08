@@ -54,6 +54,7 @@ class Api::MyjokesController < ApplicationController
   # POST /myjokes.json
   def create
     uid = params[:myjoke][:uid]
+    params[:myjoke][:approved] = 0
     
     @myjoke = Myjoke.new(params[:myjoke])
     if params[:imageFileData]
@@ -63,12 +64,14 @@ class Api::MyjokesController < ApplicationController
 
     if @myjoke.save
       render :json => { :success => true, :id => @myjoke.id}
+      @myjoke.set_full_url
+      @myjoke.save!
     else
       render :json => { :success => false }
     end
   end
 
-  # POST /myjokes/1.json
+  # POST /myjokes/play.json
   def play
     if params[:uid].nil?
       render :json => { :success => false }
@@ -111,9 +114,11 @@ class Api::MyjokesController < ApplicationController
     end
   end
 
-  # POST /feedback
-  def feedback
-    @myjoke.audio_url = File.open(createAudioFile(params[:audioFileData], uid))
+  # GET /myjokes/checkVersion
+  def checkVersion
+    version = "1.0"
+    name = "Joke-v0.1.1.apk"
+    render :json => { :current_version => version, :url => "/versions/#{name}" }
   end
 
   def createPhoto(file, uid)

@@ -36,7 +36,7 @@ class Api::LikesController < ApplicationController
         render json: { success: false, reason: "用户已经喜欢" }
       end
     elsif "0" == params[:isLike]
-        render json: { success: false, reason: "" }
+        render json: { success: false, reason: "笑话没有被用户喜欢过" }
     elsif @like.save
       render json: { success: true, myjoke_id: @like.myjoke_id, num_likes: @like.num_likes}
     else

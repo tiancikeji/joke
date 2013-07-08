@@ -8,6 +8,7 @@ Joke::Application.routes.draw do
     resources :myjokes
     resources :feedbacks
     match '/myjokes/play' => "myjokes#play", :via => :post
+    match '/version/checkVersion' => "myjokes#checkVersion", :via => :get
   end
 
   authenticated :user do

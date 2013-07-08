@@ -40,9 +40,7 @@ class MyjokesController < ApplicationController
   # POST /myjokes
   # POST /myjokes.json
   def create
-    
     @myjoke = Myjoke.new(params[:myjoke])
-
     respond_to do |format|
       if @myjoke.save
         format.html { redirect_to @myjoke, notice: 'Myjoke was successfully created.' }

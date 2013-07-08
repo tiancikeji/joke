@@ -1,15 +1,15 @@
 <%= form_for(@myjoke) do |f| %>
-  <% if @myjoke.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@myjoke.errors.count, "error") %> prohibited this myjoke from being saved:</h2>
 
-      <ul>
-      <% @myjoke.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <% if @myjoke.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@myjoke.errors.count, "error") %> prohibited this myjoke from being saved:</h2>
+    <ul>
+    <% @myjoke.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+   </div>
+ <% end %>
 
   <div class="field">
     <%= f.label :uid %><br />
@@ -25,17 +25,21 @@
     <%= f.text_field :description %>
   </div>
   <div class="field">
-    <%= f.label :picture_url %><br />
-    <%= f.file_field :picture_url %>
+    <%= f.label :length %><br />
+    <%= f.number_field :length %>
   </div>
   <div class="field">
     <%= f.label :audio_url %><br />
     <%= f.file_field :audio_url %>
   </div>
   <div class="field">
+    <%= f.label :picture_url %><br />
+    <%= f.file_field :picture_url %>
+  </div>
+  <div class="field">
     <%= f.radio_button :approved, '1' %> accept
 
-    <%= f.radio_button :approved, '2' %> reject
+    <%= f.radio_button :approved, '0' %> reject
   </div>
   <div class="actions">
     <%= f.submit %>

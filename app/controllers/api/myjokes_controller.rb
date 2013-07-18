@@ -20,7 +20,7 @@ class Api::MyjokesController < ApplicationController
    #else
    #  @myjokes = Myjoke.order("created_at DESC").limit(PER_PAGE).offset(offset)
    #end
-    render json: { :myjokes => Myjoke.getJokes(params[:uid], params[:page], params[:date]) }
+    render json: { :myjokes => Myjoke.getJokes(params[:uid], params[:page], params[:date], params[:dir]) }
   end
 
   # GET /myjokes/1
@@ -65,8 +65,10 @@ class Api::MyjokesController < ApplicationController
 
     if @myjoke.save
       render :json => { :success => true, :id => @myjoke.id}
-      @myjoke.set_full_url
-      @myjoke.save!
+     @myjoke.set_full_url
+     @myjoke.set_file_size
+     @myjoke.set_audio_length
+     @myjoke.save!
     else
       render :json => { :success => false }
     end
@@ -118,7 +120,7 @@ class Api::MyjokesController < ApplicationController
   # GET /myjokes/checkVersion
   def checkVersion
     version = "1.0"
-    name = "Joke-v0.1.1.apk"
+    name = "YitingDaodi.apk"
     render :json => { :current_version => version, :url => "/versions/#{name}" }
   end
 

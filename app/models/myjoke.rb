@@ -2,7 +2,7 @@ require 'taglib'
 class Myjoke < ActiveRecord::Base
   NUM_PER_PAGE = 10
   attr_accessible :approved, :audio_url, :name, :picture_url, :uid, :description, :length,
-    :full_picture_url, :full_audio_url, :num_plays
+    :full_picture_url, :full_audio_url, :num_plays, :picture_size_in_b, :audio_size_in_b
   
   mount_uploader :picture_url, PictureUploader
 
@@ -14,18 +14,21 @@ class Myjoke < ActiveRecord::Base
   validates :uid, :presence => true
   before_save :set_full_url
   before_save :set_audio_length
+  before_save :set_file_size
 
-  def self.getJokes(uid, page = 0, date = nil)
+  def self.getJokes(uid, page = 0, date = nil, dir = 0)
     query = ""
     if date.nil?
-      query = "SELECT my.num_plays,my.approved, my.length, my.full_picture_url, my.full_audio_url, my.uid, my.name, my.description, my.created_at, my.id as id, CASE WHEN like.id IS NULL THEN 0 ELSE 1 END as is_like, (SELECT COUNT(*) FROM likes as like_inner WHERE like_inner.myjoke_id = my.id) AS num_likes FROM myjokes AS my left join likes AS like ON my.id = like.myjoke_id AND like.uid = '#{uid}' "
+      query = "SELECT my.updated_at, my.num_plays,my.approved, my.length, my.full_picture_url, my.full_audio_url, my.uid, my.name, my.description, my.created_at, my.picture_size_in_b, my.audio_size_in_b, my.id as id, CASE WHEN like.id IS NULL THEN 0 ELSE 1 END as is_like, (SELECT COUNT(*) FROM likes as like_inner WHERE like_inner.myjoke_id = my.id) AS num_likes FROM myjokes AS my left join likes AS like ON my.id = like.myjoke_id AND like.uid = '#{uid}' "
       query += "WHERE (like.id IS null OR like.uid <> '') AND my.approved <> 0 "
-      query += "ORDER BY my.created_at DESC LIMIT #{NUM_PER_PAGE} "
+      query += "ORDER BY my.updated_at DESC LIMIT #{NUM_PER_PAGE} "
     if not page.nil? and page.to_i > 1
       query += "OFFSET #{(page.to_i - 1) * NUM_PER_PAGE}"
     end
     else 
-      query = "select c.*,  CASE WHEN l.uid IS NULL THEN 0 ELSE 1 END as is_like from (SELECT m.*, count(l.id) as num_likes from (select * from myjokes where strftime('%Y%m%d', created_at) = '#{date}') as m left join likes as l on m.id=l.myjoke_id group by m.id) as c left join (select * from likes where uid='#{uid}') as l on c.id=l.myjoke_id order by c.created_at limit 10"
+      query = "select c.*,  CASE WHEN l.uid IS NULL THEN 0 ELSE 1 END as is_like from (SELECT m.*, count(l.id) as num_likes from (select * from myjokes where strftime('%Y%m%d', updated_at)"
+      query += (dir.to_i==0?" >= ":" <= ")
+      query += "'#{date}' and approved<>0) as m left join likes as l on m.id=l.myjoke_id group by m.id) as c left join (select * from likes where uid='#{uid}') as l on c.id=l.myjoke_id order by c.updated_at limit 10"
     end
 
     # if not date.nil?
@@ -34,17 +37,28 @@ class Myjoke < ActiveRecord::Base
     # end
     ActiveRecord::Base.connection.select_all(query)
   end
+
+  
+  def set_file_size
+    if not self.picture_url.nil? and self.picture_size_in_b.nil?
+       self.assign_attributes(:picture_size_in_b => self.picture_url.size.to_f)
+    end
+    if not self.audio_url.nil? and self.audio_size_in_b.nil?
+       self.assign_attributes(:audio_size_in_b => self.audio_url.size.to_f)
+    end
+  end
   
   def set_full_url
-    self.full_picture_url = self.picture_url.url
-    self.full_audio_url = self.audio_url.url
+    self.assign_attributes(:full_picture_url => self.picture_url.url,
+      :full_audio_url => self.audio_url.url)
+   # self.full_picture_url = self.picture_url.url
+   # self.full_audio_url = self.audio_url.url
   end
   
   def set_audio_length
     if self.length <= 0
       TagLib::MPEG::File.open(self.audio_url.path) do |file|
-        self.update_attributes(:length => file.audio_properties.length)
-        self.save!
+        self.assign_attributes(:length => file.audio_properties.length)
       end
     end
   end

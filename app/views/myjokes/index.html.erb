@@ -9,6 +9,7 @@
     <th>Audio</th>
     <th>User</th>
     <th>Length</th>
+    <th>Num Plays</th>
     <th>Like</th>
     <th>Approved</th>
     <th></th>
@@ -25,6 +26,7 @@
     <td><a href="<%= myjoke.audio_url %>" target="blank">click to play</a></td>
     <td><%= myjoke.uid %></td>
     <td><%= myjoke.length %></td>
+    <td><%= myjoke.num_plays %></td>
     <td><%= myjoke.likes.count %></td>
     <td><%= myjoke.approved %></td>
     <td><%= link_to 'Show', myjoke %></td>

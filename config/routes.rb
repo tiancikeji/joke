@@ -15,6 +15,8 @@ Joke::Application.routes.draw do
     root :to => 'home#index'
   end
   root :to => "home#index"
+  match '/mobile' => 'home#mobile'
+
   devise_for :users
   resources :users
 

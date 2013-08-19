@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130709174033) do
+ActiveRecord::Schema.define(:version => 20130812153652) do
 
   create_table "feedbacks", :force => true do |t|
     t.string   "uid"
@@ -37,12 +37,13 @@ ActiveRecord::Schema.define(:version => 20130709174033) do
     t.datetime "updated_at",                       :null => false
     t.string   "uid"
     t.string   "description"
+    t.integer  "num_likes",         :default => 0
     t.integer  "length",            :default => 0
-    t.integer  "num_plays",         :default => 0
     t.string   "full_audio_url"
     t.string   "full_picture_url"
     t.float    "picture_size_in_b"
     t.float    "audio_size_in_b"
+    t.integer  "num_plays",         :default => 0
   end
 
   create_table "roles", :force => true do |t|

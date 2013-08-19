@@ -1,4 +1,4 @@
-class Myjoke < ActiveRecord::Base
+class Myjoke1 < ActiveRecord::Base
   NUM_PER_PAGE = 10
   attr_accessible :approved, :audio_url, :name, :picture_url, :uid, :description, :length,
     :full_picture_url, :full_audio_url, :num_plays

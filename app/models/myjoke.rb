@@ -26,9 +26,9 @@ class Myjoke < ActiveRecord::Base
       query += "OFFSET #{(page.to_i - 1) * NUM_PER_PAGE}"
     end
     else 
-      query = "select c.*,  CASE WHEN l.uid IS NULL THEN 0 ELSE 1 END as is_like from (SELECT m.*, count(l.id) as num_likes from (select * from myjokes where strftime('%Y%m%d', updated_at)"
+      query = "select c.*,  CASE WHEN l.uid IS NULL THEN 0 ELSE 1 END as is_like from (SELECT m.*, count(l.id) as num_likes1 from (select * from myjokes where date_format(updated_at, '%Y%m%d')"
       query += (dir.to_i==0?" >= ":" <= ")
-      query += "'#{date}' and approved<>0) as m left join likes as l on m.id=l.myjoke_id group by m.id) as c left join (select * from likes where uid='#{uid}') as l on c.id=l.myjoke_id order by c.updated_at limit 10"
+      query += "'#{date}' and approved<>0) as m left join likes as l on m.id=l.myjoke_id group by m.id) as c left join (select * from likes where uid='#{uid}') as l on c.id=l.myjoke_id order by c.updated_at DESC limit 10"
     end
 
     # if not date.nil?
@@ -56,7 +56,7 @@ class Myjoke < ActiveRecord::Base
   end
   
   def set_audio_length
-    if self.length <= 0
+    if self.length <= 0 and not self.audio_url.nil? and not self.audio_url.path.nil?
       TagLib::MPEG::File.open(self.audio_url.path) do |file|
         self.assign_attributes(:length => file.audio_properties.length)
       end

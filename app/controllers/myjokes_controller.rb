@@ -43,6 +43,8 @@ class MyjokesController < ApplicationController
     @myjoke = Myjoke.new(params[:myjoke])
     respond_to do |format|
       if @myjoke.save
+	  @myjoke.set_full_url
+	  @myjoke.save!
         format.html { redirect_to @myjoke, notice: 'Myjoke was successfully created.' }
         format.json { render json: @myjoke, status: :created, location: @myjoke }
       else

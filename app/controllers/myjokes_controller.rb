@@ -63,7 +63,7 @@ class MyjokesController < ApplicationController
       if @myjoke.update_attributes(params[:myjoke])
 	#update approved_time when approved = 1
 	if @myjoke.approved == 1
-	   Myjoke.update(@myjoke.id,:approved_time => Time.now)
+	   Myjoke.update(@myjoke.id,:approval_time => Time.now)
 	end
         format.html { redirect_to @myjoke, notice: 'Myjoke was successfully updated.' }
         format.json { head :no_content }

@@ -2,7 +2,7 @@ require 'taglib'
 class Myjoke < ActiveRecord::Base
   NUM_PER_PAGE = 10
   attr_accessible :approved, :audio_url, :name, :picture_url, :uid, :description, :length,
-    :full_picture_url, :full_audio_url, :num_plays, :picture_size_in_b, :audio_size_in_b
+    :full_picture_url, :full_audio_url, :num_plays, :picture_size_in_b, :audio_size_in_b, :approval_time
   
   mount_uploader :picture_url, PictureUploader
 

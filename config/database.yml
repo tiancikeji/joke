@@ -14,7 +14,7 @@ development:
   database: jokesdev
   host: localhost
   username: root
-  password: root7ren
+  password: 
   pool: 5
   timeout: 5000
 

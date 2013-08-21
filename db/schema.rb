@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(:version => 20130821062333) do
     t.string   "full_picture_url"
     t.float    "picture_size_in_b"
     t.float    "audio_size_in_b"
-    t.integer  "num_plays",         :default => 0
+    t.integer  "num_plays"
     t.datetime "approval_time"
   end
 

@@ -22,8 +22,9 @@
 
 <p>
   <b>Approved:</b>
-  <%= @myjoke.approved %>
+  <%= @myjoke.approved %> at <%= @myjoke.approval_time %>
 </p>
+
 
 
 <%= link_to 'Edit', edit_myjoke_path(@myjoke) %> |

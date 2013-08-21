@@ -17,19 +17,13 @@ class Myjoke < ActiveRecord::Base
   before_save :set_file_size
 
   def self.getJokes(uid, page = 0, date = nil, dir = 0)
-    query = ""
-    if date.nil?
-      query = "SELECT my.updated_at, my.num_plays,my.approved, my.length, my.full_picture_url, my.full_audio_url, my.uid, my.name, my.description, my.created_at, my.picture_size_in_b, my.audio_size_in_b, my.id as id, CASE WHEN like.id IS NULL THEN 0 ELSE 1 END as is_like, (SELECT COUNT(*) FROM likes as like_inner WHERE like_inner.myjoke_id = my.id) AS num_likes FROM myjokes AS my left join likes AS like ON my.id = like.myjoke_id AND like.uid = '#{uid}' "
-      query += "WHERE (like.id IS null OR like.uid <> '') AND my.approved <> 0 "
-      query += "ORDER BY my.updated_at DESC LIMIT #{NUM_PER_PAGE} "
-    if not page.nil? and page.to_i > 1
-      query += "OFFSET #{(page.to_i - 1) * NUM_PER_PAGE}"
-    end
-    else 
-      query = "select c.*,  CASE WHEN l.uid IS NULL THEN 0 ELSE 1 END as is_like from (SELECT m.*, count(l.id) as num_likes1 from (select * from myjokes where date_format(updated_at, '%Y%m%d')"
-      query += (dir.to_i==0?" >= ":" <= ")
-      query += "'#{date}' and approved<>0) as m left join likes as l on m.id=l.myjoke_id group by m.id) as c left join (select * from likes where uid='#{uid}') as l on c.id=l.myjoke_id order by c.updated_at DESC limit 10"
-    end
+    query = "select c.*,  CASE WHEN l.uid IS NULL THEN 0 ELSE 1 END as is_like from (SELECT m.*, count(l.id) as num_likes1 from (select * from myjokes where "
+     if not date.nil?
+       query += "date_format(approval_time, '%Y%m%d')"
+       query += (dir.to_i==0?" >= ":" <= ")
+       query += "'#{date}' and "
+     end
+      query += "approved<>0) as m left join likes as l on m.id=l.myjoke_id group by m.id) as c left join (select * from likes where uid='#{uid}') as l on c.id=l.myjoke_id order by c.updated_at DESC limit 10"
 
     # if not date.nil?
       # date = Time.parse(date + " 00:00 UTC")

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130812153652) do
+ActiveRecord::Schema.define(:version => 20130821062333) do
 
   create_table "feedbacks", :force => true do |t|
     t.string   "uid"
@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(:version => 20130812153652) do
     t.float    "picture_size_in_b"
     t.float    "audio_size_in_b"
     t.integer  "num_plays",         :default => 0
+    t.datetime "approval_time"
   end
 
   create_table "roles", :force => true do |t|
